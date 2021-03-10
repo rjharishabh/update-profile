@@ -10,7 +10,7 @@
   <div class="card mx-auto">
     <h2 class="text-center ">Sign Up</h2>
     <div class="card-body">
-      <form class="" action="signupAuth.php" method="post">
+      <form class="" action="emailAuth.php" method="post">
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" required name="email" id="email" value="">

@@ -12,7 +12,8 @@ if ($row===false) {
 }
 else {
   if ($row['password']===hash('md5',$_POST['password']."root")) {
-header('Location:profile.php');
+    $_SESSION['user']=$_POST['username'];
+header('Location:loginprofile.php');
   }
   else {
     $_SESSION['error']="Incorrect Password";

@@ -9,8 +9,9 @@ $stmt->execute(array(
 ':em'=>$_POST['email'],
 ':pw'=>hash('md5',$_POST['password']."root")
 ));
-
-header('Location:profile.php');
+$_SESSION['user']=$_POST['username'];
+$_SESSION['email']=$_POST['email'];
+header('Location:emailAuth.php');
 
 }
 
