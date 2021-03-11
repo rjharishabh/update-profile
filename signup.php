@@ -30,10 +30,7 @@
       </div>
           <div class="form-group text-center">
           <h6>If you have an account, please <a href="login.php">log in</a></h6>
-          </div>
-
-
-
+        </div>
       </form>
     </div>
   </div>

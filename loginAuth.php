@@ -4,14 +4,14 @@ require_once "db.php";
 if (isset($_POST['username'])&&isset($_POST['password'])) {
   $query="SELECT  username, password FROM user WHERE username=:un";
 $stmt=$db->prepare($query);
-$stmt->execute(array(":un"=>hash('md5',$_POST['username']."root")));
+$stmt->execute(array(":un"=>$_POST['username']));
 $row=$stmt->fetch(PDO::FETCH_ASSOC);
 if ($row===false) {
   $_SESSION['error']="Incorrect Username";
   header('Location:login.php');
 }
 else {
-  if ($row['password']===hash('md5',$_POST['password']."root")) {
+  if ($row['password']===$_POST['password']) {
     $_SESSION['user']=$_POST['username'];
 header('Location:loginprofile.php');
   }

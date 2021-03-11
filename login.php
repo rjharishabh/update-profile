@@ -16,6 +16,11 @@ session_start();
       echo ("<p class='text-danger'>".$_SESSION['error']."</p>");
       unset($_SESSION['error']);
     } ?>
+    <?php
+    if(isset($_SESSION['success'])){
+      echo ("<p class='text-success'>".$_SESSION['success']."</p>");
+      unset($_SESSION['success']);
+    } ?>
     <h2 class="text-center ">Log In</h2>
     <div class="card-body">
       <form class="" action="loginAuth.php" method="post">
@@ -30,7 +35,7 @@ session_start();
         <input type="password" name="password" required id="password" value="">
         <input type="checkbox" name="" value="" id="show" onchange="change()">
         <label for="show">show password</label>
-        <a href="#">forgot password</a>
+        <a href="fpass.php">forgot password</a>
       </div>
       <div class="form-group text-center">
         <button type="submit" class="btn btn-primary">Log In</button>

@@ -1,10 +1,5 @@
 <?php
 session_start();
-
-if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
-  $_SESSION['user']=$_POST['username'];
-  $_SESSION['email']=$_POST['email'];
-  $_SESSION['password']=$_POST['password'];
   $code="";
   $to = $_SESSION['email'];
   $subject = "Verify email address";
@@ -15,21 +10,6 @@ if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['passwor
   $txt = $code." is the verification code.";
   $headers = "From: update@example.com";
   mail($to,$subject,$txt,$headers);
-
-}
-else {
-  $code="";
-  $to = $_SESSION['email'];
-  $subject = "Verify email address";
-  for ($i=1; $i <=8 ; $i++) {
-    $code=$code.rand(0,9);
-  }
-    $_SESSION['code']=$code;
-  $txt = $code." is the verification code.";
-  $headers = "From: update@example.com";
-  mail($to,$subject,$txt,$headers);
-}
-
 
  ?>
 <!DOCTYPE html>
@@ -44,7 +24,7 @@ else {
       <div class="card mx-auto">
         <h2 class="text-center ">Enter the verification code: </h2>
         <div class="card-body">
-          <form  action="profile.php" method="post">
+          <form  action="password_reset.php" method="post">
             <?php
 if (isset($_SESSION['error'])) {
 echo("<p class='text-center text-danger'>".$_SESSION['error']."</p>");

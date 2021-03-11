@@ -6,13 +6,13 @@ if(isset($_POST['verify'])){
     $query="INSERT INTO user (username,email,password) VALUES (:un,:em,:pw)";
     $stmt=$db->prepare($query);
     $stmt->execute(array(
-    ':un'=>hash('md5',$_SESSION['user']."root"),
+    ':un'=>$_SESSION['user'],
     ':em'=>$_SESSION['email'],
-    ':pw'=>hash('md5',$_SESSION['password']."root")
+    ':pw'=>$_SESSION['password'],
     ));
   }
   else{
-    $_SUCCESS['error']="Incorrect code";
+    $_SESSION['error']="Incorrect code";
     header('Location:emailAuth.php');
   }
 }
