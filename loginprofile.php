@@ -9,6 +9,7 @@
 <div class="container">
   <div class="text-center">
       <h2 >Welcome</h2>
+        <?php echo $_SERVER['REMOTE_ADDR']; ?>
       <a href="logout.php">Log out</a>
   </div>
 

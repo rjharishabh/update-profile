@@ -34,6 +34,7 @@ else {
   </head>
   <body>
 <div class="container">
+  <img src="imgs/blank.png" alt="">
   <div class="text-center">
       <h2 >Welcome</h2>
       <a href="logout.php">Log out</a>

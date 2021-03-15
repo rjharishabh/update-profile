@@ -6,6 +6,7 @@ session_start();
   <head>
     <meta charset="utf-8">
     <title>Log In</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   </head>
   <body>
@@ -23,7 +24,7 @@ session_start();
     } ?>
     <h2 class="text-center ">Log In</h2>
     <div class="card-body">
-      <form class="" action="loginAuth.php" method="post">
+      <form id="login" action="loginAuth.php" method="post">
 
         <div class="form-group">
           <label for="username">Username</label>
@@ -37,15 +38,34 @@ session_start();
         <label for="show">show password</label>
         <a href="fpass.php">forgot password</a>
       </div>
+     <div class="g-recaptcha" data-sitekey="6Ldo0nwaAAAAAIbM9sHZljoHPaIkzaScYpofH41i"></div>
       <div class="form-group text-center">
+
         <button type="submit" class="btn btn-primary">Log In</button>
       </div>
           <div class="form-group text-center">
           <h6>If you don't have an account, please <a href="signup.php">sign up</a></h6>
           </div>
 
-
-
+          <!-- <script>
+             function onSubmit(token) {
+               document.getElementById("login").submit();
+             }
+           </script> -->
+           <!-- <script>
+              document.getElementById('login').addEventListener('submit', event => {
+                   event.preventDefault()
+                   function getRecaptchaToken(form) {
+       grecaptcha.ready(function() {
+           grecaptcha.execute('6LcAv3waAAAAANvAMZEG2I50PAm4qIQLXpYx5vrh', {action: 'loginAuth.php'}).then(function(token) {
+             console.log(token);
+            document.querySelector('[name="g-recaptcha-response"]').value = token //set the value of the hidden field
+               form.submit() //submit the form
+           });
+       });
+   }
+               });
+           </script> -->
       </form>
     </div>
   </div>

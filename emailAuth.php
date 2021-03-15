@@ -5,29 +5,29 @@ if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['passwor
   $_SESSION['user']=$_POST['username'];
   $_SESSION['email']=$_POST['email'];
   $_SESSION['password']=$_POST['password'];
-  $code="";
+  $code="123456";
   $to = $_SESSION['email'];
   $subject = "Verify email address";
-  for ($i=1; $i <=8 ; $i++) {
-    $code=$code.rand(0,9);
-  }
+  // for ($i=1; $i <=8 ; $i++) {
+  //   $code=$code.rand(0,9);
+  // }
     $_SESSION['code']=$code;
   $txt = $code." is the verification code.";
   $headers = "From: update@example.com";
-  mail($to,$subject,$txt,$headers);
+  // mail($to,$subject,$txt,$headers);
 
 }
 else {
-  $code="";
+  $code="123456";
   $to = $_SESSION['email'];
   $subject = "Verify email address";
-  for ($i=1; $i <=8 ; $i++) {
-    $code=$code.rand(0,9);
-  }
+  // for ($i=1; $i <=8 ; $i++) {
+  //   $code=$code.rand(0,9);
+  // }
     $_SESSION['code']=$code;
   $txt = $code." is the verification code.";
   $headers = "From: update@example.com";
-  mail($to,$subject,$txt,$headers);
+  // mail($to,$subject,$txt,$headers);
 }
 
 

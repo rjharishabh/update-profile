@@ -1,7 +1,9 @@
 <?php
 session_start();
+
+
 require_once "db.php";
-if (isset($_POST['username'])&&isset($_POST['password'])) {
+if (isset($_POST['username'])&&isset($_POST['password'])&&isset($_POST['g-recaptcha-response'])) {
   $query="SELECT  username, password FROM user WHERE username=:un";
 $stmt=$db->prepare($query);
 $stmt->execute(array(":un"=>$_POST['username']));
@@ -20,5 +22,7 @@ header('Location:loginprofile.php');
       header('Location:login.php');
   }
 }
+$url =  'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode('') . '&response=' . $_POST['g-recaptcha-response'];
+$response = file_get_contents($url);
 }
  ?>
