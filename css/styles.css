@@ -1,8 +1,14 @@
-.profile{
-  margin: 0 auto;
-}
+
 [alt="profile-pic"]{
+  display: block;
+  margin-top: 25px;
+  margin-left: auto;
+  margin-right: auto;
   width: 200px;
   height: 200px;
   border-radius: 200px;
+}
+.profile-pic{
+  margin: 0 auto;
+  /* width: 500px; */
 }

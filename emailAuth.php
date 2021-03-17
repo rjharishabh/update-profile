@@ -44,7 +44,7 @@ else {
       <div class="card mx-auto">
         <h2 class="text-center ">Enter the verification code: </h2>
         <div class="card-body">
-          <form  action="profile.php" method="post">
+          <form  action="editprofile.php" method="post">
             <?php
 if (isset($_SESSION['error'])) {
 echo("<p class='text-center text-danger'>".$_SESSION['error']."</p>");

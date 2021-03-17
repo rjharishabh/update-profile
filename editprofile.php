@@ -1,59 +1,73 @@
- <!-- <?php
- $_SESSION['img']='imgs/day93-programing.png';
-require_once "db.php";
+<?php
+session_start();
+require_once 'db.php';
+if(isset($_POST['verify'])){
+  if($_SESSION['code']==$_POST['verify']){
+    $query="INSERT INTO user (username,email,password) VALUES (:un,:em,:pw)";
+    $stmt=$db->prepare($query);
+    $stmt->execute(array(
+    ':un'=>$_SESSION['user'],
+    ':em'=>$_SESSION['email'],
+    ':pw'=>$_SESSION['password'],
+    ));
+  }
+  else{
+    $_SESSION['error']="Incorrect code";
+    header('Location:emailAuth.php');
+  }
+}
+else {
+  $_SESSION['error']="Please enter the code";
+    header('Location:emailAuth.php');
+}
+
 if (isset($_POST['name'])&&isset($_POST['about'])&&isset($_POST['loc'])) {
-
-
   $target_dir = "imgs/";
   $target_file = $target_dir . basename($_FILES["picFile"]["name"]);
+$_SESSION['img']=$target_file;
   // $uploadOk = 1;
   // $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
   move_uploaded_file($_FILES["picFile"]["tmp_name"], $target_file);
 
 
-$query="INSERT INTO DETA(name,about,location) VALUES (:name,:about,:loc)";
+$query="INSERT INTO DETA(name,about,location,image) VALUES (:name,:about,:loc,:im)";
 $stmt=$db->prepare($query);
 $stmt->execute(array(':name' => $_POST['name'],
 ':about'=>$_POST['about'],
-':loc'=>$_POST['loc']
+':loc'=>$_POST['loc'],
+':im'=>$target_file
  ));
 
-
-
+header('Location:viewprofile.php');
 }
 
-
  ?>
-
 
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Profile</title>
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/styles.css">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
-<div class="container">
-  <!-- <?php echo "<p style='float:right';>Your ip address is ".$_SERVER['REMOTE_ADDR']."</p>" ?> -->
-  <!-- <button style='float:right;'  class="btn btn-sm btn-primary">Edit</button> -->
+  <div class="container">
+  <?php echo "<p style='float:right';>Your ip address is ".$_SERVER['REMOTE_ADDR']."</p>" ?>
+<a style="float:right;display:block;"href="logout.php">Log out</a>
+<fieldset>
+  <form action="editprofile.php" enctype="multipart/form-data" method="post">
   <div class="profile">
     <div class="profile-pic">
-     <img src=<?=$_SESSION['img'] ?> alt="profile-pic">
-      <input type="file"  id="pic" name="picFile" >
-
-      <!-- <label for="pic"><i class="fa fa-file-image-o fa-3x" aria-hidden="true"></i></label> -->
+     <img src="imgs/blank.png" alt="profile-pic">
+      <input type="file"  id="pic" name="picFile">
     </div>
       </div>
-    <fieldset>
-      <form action="pr.php" enctype="multipart/form-data" method="post">
-<div class="text-center">
+
+  <div class="text-center">
         <input type="text" class="text-center" name="name" size="30" placeholder="Full Name">
-</div>
+  </div>
 
 
         <div class="details">
@@ -104,16 +118,8 @@ $stmt->execute(array(':name' => $_POST['name'],
         </div>
             <input type="submit" value="Cancel" name="cancel">
       <input type="submit" value="Submit">
-
       </form>
     </fieldset>
-
-
-
-
-
-
   </div>
-
-  </body>
-</html> -->
+</body>
+</html>
