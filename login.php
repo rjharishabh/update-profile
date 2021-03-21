@@ -6,12 +6,11 @@ session_start();
   <head>
     <meta charset="utf-8">
     <title>Log In</title>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
-<div class="container">
-  <div class="card mx-auto">
     <?php
     if(isset($_SESSION['error'])){
       echo ("<p class='text-danger'>".$_SESSION['error']."</p>");
@@ -22,52 +21,51 @@ session_start();
       echo ("<p class='text-success'>".$_SESSION['success']."</p>");
       unset($_SESSION['success']);
     } ?>
-    <h2 class="text-center ">Log In</h2>
-    <div class="card-body">
-      <form id="login" action="loginAuth.php" method="post">
-
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" name="username" required id="username" value="">
-              <a href="#">forgot username</a>
+<div class="container">
+    <a href="index.php"><h3 class="head text-white">Update Profile</h3></a>
+  <div class="row">
+    <div class="col justify-content-center">
+      <div class="card mx-auto">
+        <h1 class="text-center text-primary">Log In</h1>
+        <div class="card-body">
+          <form id="login" action="loginAuth.php" method="post">
+            <div class="form-group">
+              <div class="row">
+<div class="col-3">
+    <label for="username"><h4>Username</h4></label>
+</div>
+<div class="col-8">
+    <input type="text" name="username" class="form-control" required id="username" value="">
+    <a href="#" class="forgot">forgot username</a>
+</div>
+      </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+        <div class="col-3">
+        <label for="password"><h4>Password</h4></label>
         </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" name="password" required id="password" value="">
-        <input type="checkbox" name="" value="" id="show" onchange="change()">
-        <label for="show">show password</label>
-        <a href="fpass.php">forgot password</a>
-      </div>
-     <div class="g-recaptcha" data-sitekey="6Ldo0nwaAAAAAIbM9sHZljoHPaIkzaScYpofH41i"></div>
-      <div class="form-group text-center">
-
-        <button type="submit" class="btn btn-primary">Log In</button>
-      </div>
+        <div class="col-8">
+    <input  class="form-control" type="password" name="password" required id="password">
+      <a href="fpass.php" class="forgot">forgot password</a>
+</div>
+<div class="col-1" id="fp" onclick="change()">
+    <img class="eye" src="imgs/eye-slash.svg" alt="i-slash">
+</div>
+        </div>
+        </div>
           <div class="form-group text-center">
-          <h6>If you don't have an account, please <a href="signup.php">sign up</a></h6>
+            <button type="submit" class="btn btn-lg btn-primary">Log In</button>
           </div>
-
-          <!-- <script>
-             function onSubmit(token) {
-               document.getElementById("login").submit();
-             }
-           </script> -->
-           <!-- <script>
-              document.getElementById('login').addEventListener('submit', event => {
-                   event.preventDefault()
-                   function getRecaptchaToken(form) {
-       grecaptcha.ready(function() {
-           grecaptcha.execute('6LcAv3waAAAAANvAMZEG2I50PAm4qIQLXpYx5vrh', {action: 'loginAuth.php'}).then(function(token) {
-             console.log(token);
-            document.querySelector('[name="g-recaptcha-response"]').value = token //set the value of the hidden field
-               form.submit() //submit the form
-           });
-       });
-   }
-               });
-           </script> -->
-      </form>
+              <div class="form-group text-center">
+              <h5>Don't have an account?<a href="signup.php">Sign Up</a></h5>
+              </div>
+          </form>
+              </div>
+        </div>
+      </div>
     </div>
+
   </div>
 
 </div>
@@ -75,10 +73,14 @@ session_start();
   <script type="text/javascript">
     function change(){
       var p=document.getElementById('password');
-      if(p.type=="password")
-      p.type="text";
+      if(p.type=="password"){
+          p.type="text";
+          document.getElementById('fp').innerHTML="<img class='t'  style='width:30px;' src='imgs/eye.svg'>";
+      }
+
       else {
         p.type="password";
+        document.getElementById('fp').innerHTML="<img class='t'  style='width:30px;' src='imgs/eye-slash.svg'>";
       }
     }
   </script>

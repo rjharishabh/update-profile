@@ -1,4 +1,9 @@
-
+a:hover{
+  text-decoration: none;
+}
+body{
+  background-color:#9bc9d152;
+}
 [alt="profile-pic"]{
   display: block;
   margin-top: 25px;
@@ -11,4 +16,51 @@
 .profile-pic{
   margin: 0 auto;
   /* width: 500px; */
+}
+main{
+  margin:25px;
+
+}
+.prog-img:nth-child(1){
+  float:left;
+}
+.prog-img:nth-child(2){
+  float:right;
+}
+a{
+  margin:20px;
+}
+.prog-img{
+  margin:20px;
+  border-radius: 100px;
+  border:blue solid 1px;
+  transition:box-shadow 1s,transform 1s;
+}
+.prog-img:hover{
+  box-shadow:5px 3px 3px 1px #2C8FCD;
+  transform: scale(1.1);
+}
+h3.head{
+  margin: 15px;
+  padding: 12px;
+  background-color:blue;
+  opacity: 0.7;
+  height: 60px;
+  width: 210px;
+  border-radius: 50px;
+  display: inline-block;
+}
+.card{
+  padding:20px;
+  border-radius:50px;
+  width: 600px;
+}
+input{
+  width: 100%;
+}
+.forgot{
+  float:right;
+}
+.eye{
+  width:30px;
 }

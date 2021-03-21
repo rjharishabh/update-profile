@@ -25,6 +25,12 @@
         <input type="checkbox" id="show" onchange="change()">
         <label for="show">show password</label>
       </div>
+      <div class="form-group">
+        <label for="password">Confirm Password</label>
+        <input type="password" required name="password" id="password" value="">
+        <input type="checkbox" id="show" onchange="change()">
+        <label for="show">show password</label>
+      </div>
       <div class="form-group text-center">
         <button type="submit" class="btn btn-primary">Sign Up</button>
       </div>
