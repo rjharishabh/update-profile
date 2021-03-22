@@ -22,7 +22,5 @@ header('Location:loginprofile.php');
       header('Location:login.php');
   }
 }
-$url =  'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode('') . '&response=' . $_POST['g-recaptcha-response'];
-$response = file_get_contents($url);
 }
  ?>

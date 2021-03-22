@@ -6,9 +6,11 @@ session_start();
   <head>
     <meta charset="utf-8">
     <title>Log In</title>
+        <link rel="icon" href="imgs/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/script.js"></script>
   </head>
   <body>
     <?php
@@ -35,7 +37,7 @@ session_start();
     <label for="username"><h4>Username</h4></label>
 </div>
 <div class="col-8">
-    <input type="text" name="username" class="form-control" required id="username" value="">
+    <input type="text" name="username" class="form-control" required id="username">
     <a href="#" class="forgot">forgot username</a>
 </div>
       </div>
@@ -49,8 +51,8 @@ session_start();
     <input  class="form-control" type="password" name="password" required id="password">
       <a href="fpass.php" class="forgot">forgot password</a>
 </div>
-<div class="col-1" id="fp" onclick="change()">
-    <img class="eye" src="imgs/eye-slash.svg" alt="i-slash">
+<div class="col-1"  onclick="change()">
+    <img class="eye" id="pass" src="imgs/eye-slash.svg" alt="i-slash">
 </div>
         </div>
         </div>
@@ -65,23 +67,7 @@ session_start();
         </div>
       </div>
     </div>
-
   </div>
-
 </div>
   </body>
-  <script type="text/javascript">
-    function change(){
-      var p=document.getElementById('password');
-      if(p.type=="password"){
-          p.type="text";
-          document.getElementById('fp').innerHTML="<img class='t'  style='width:30px;' src='imgs/eye.svg'>";
-      }
-
-      else {
-        p.type="password";
-        document.getElementById('fp').innerHTML="<img class='t'  style='width:30px;' src='imgs/eye-slash.svg'>";
-      }
-    }
-  </script>
 </html>
