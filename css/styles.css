@@ -1,10 +1,14 @@
+*{
+box-sizing: border-box;
+}
 a:hover{
   text-decoration: none;
 }
 body{
   background-color:#9bc9d152;
+  padding-bottom: 20px;
 }
-[alt="profile-pic"]{
+#profile_pic{
   display: block;
   margin-top: 25px;
   margin-left: auto;
@@ -54,14 +58,49 @@ h3.head{
   padding:20px;
   border-radius:50px;
   width: 600px;
+  margin-bottom:25px;
 }
 
-input{
-  width: 100%;
-}
 .forgot{
   float:right;
 }
 .eye{
   width:30px;
+}
+fieldset{
+  display: block;
+  border:2px #007bff solid;
+  margin: 5px;
+  padding: 2px;
+}
+legend{
+  display: inline-block;
+  width: fit-content;
+}
+.email-input.form-control{
+  border:none;
+  margin-top: -20px;
+-webkit-box-shadow: none;
+box-shadow: none;
+font-size: 20px;
+}
+.ip{
+  margin: 15px;
+  padding: 12px;
+  border:1px solid #007bff;
+  border-radius: 50px;
+  float: right;
+  font-size:20px;
+}
+.logout:hover{
+  background-color:#28a745;
+  color:#fff;
+  border-color:#fff;
+}
+input[type='file']{
+  display:none;
+ }
+.pic{
+  margin-top: 10px;
+  width:200%;
 }

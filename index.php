@@ -10,7 +10,14 @@
   </head>
   <body>
 <div class="container">
+  <div class="row">
+<div class="col-6">
   <a href="index.php"><h3 class="head text-white">Update Profile</h3></a>
+</div>
+<div class="col-6">
+<p class="ip text-center">Your IP Address is <?=$_SERVER['REMOTE_ADDR']?></p>
+</div>
+  </div>
 <div class="row">
   <div class="col-6">
 <img class="prog-img img-fluid" src="imgs/mac.png" alt="">

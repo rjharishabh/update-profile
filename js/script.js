@@ -20,3 +20,12 @@ function cchange(){
     document.getElementById('cpass').src="imgs/eye-slash.svg";
   }
 }
+function upper() {
+var p=document.getElementById('fname');
+p.value=(p.value).toUpperCase();
+}
+function replace_file_name(){
+  var d=document.getElementById('pic');
+  var val=d.value.replace(/^.*\\/, "");
+document.getElementById('file_name').innerHTML=val;
+}

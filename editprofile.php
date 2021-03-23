@@ -1,4 +1,4 @@
-<?php
+   <?php
 session_start();
 require_once 'db.php';
 if(isset($_POST['verify'])){
@@ -13,20 +13,18 @@ if(isset($_POST['verify'])){
   }
   else{
     $_SESSION['error']="Incorrect code";
-    header('Location:emailAuth.php');
+    header('Location:email.php');
   }
 }
 else {
   $_SESSION['error']="Please enter the code";
-    header('Location:emailAuth.php');
+    header('Location:email.php');
 }
 
 if (isset($_POST['name'])&&isset($_POST['about'])&&isset($_POST['loc'])) {
   $target_dir = "imgs/";
   $target_file = $target_dir . basename($_FILES["picFile"]["name"]);
 $_SESSION['img']=$target_file;
-  // $uploadOk = 1;
-  // $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
   move_uploaded_file($_FILES["picFile"]["tmp_name"], $target_file);
 
 
@@ -41,85 +39,129 @@ $stmt->execute(array(':name' => $_POST['name'],
 header('Location:viewprofile.php');
 }
 
- ?>
+  ?>
 
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Edit Profile</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Edit Your Profile</title>
+    <link rel="icon" href="imgs/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/styles.css">
+<script src="js/script.js"></script>
   </head>
   <body>
   <div class="container">
-  <?php echo "<p style='float:right';>Your ip address is ".$_SERVER['REMOTE_ADDR']."</p>" ?>
-<a style="float:right;display:block;"href="logout.php">Log out</a>
-<fieldset>
-  <form action="editprofile.php" enctype="multipart/form-data" method="post">
-  <div class="profile">
-    <div class="profile-pic">
-     <img src="imgs/blank.png" alt="profile-pic">
-      <input type="file"  id="pic" name="picFile">
+    <div class="row">
+    <div class="col-6">
+    <a href="index.php"><h3 class="head text-white">Update Profile</h3></a>
+    </div>
+    <div class="col-6">
+    <p class="ip text-center">Your IP Address is <?=$_SERVER['REMOTE_ADDR']?></p>
+    </div>
+    </div>
+    <div class="row  sticky-top justify-content-end">
+    <a class="ip logout" href="logout.php">Log out</a>
+    </div>
+
+
+    <div class="row">
+      <div class="col justify-content-center">
+        <div class="card mx-auto">
+          <h1 class="text-center text-primary">Edit Your Profile</h1>
+          <div class="card-body">
+        <form action="" enctype="multipart/form-data" method="post">
+              <div class="form-group">
+                <div class="row">
+  <img src="imgs/blank.png" id="profile_pic" class="img-thumbnail img-fluid" alt="profile-pic">
+</div>
+<div class="row justify-content-center">
+  <div class="p-pic text-center">
+    <label for="pic"><img src="imgs/camera.svg" class="pic" alt="camera"></label>
+        <h6  id="file_name">Change Profile Picture</h6>
+  </div>
+</div>
+<div class="row">
+    <input type="file" id="pic" onchange="replace_file_name()" name="picFile">
+</div>
+      </div>
+<div class="form-group">
+  <div class="row">
+    <div class="col-12 col-sm-8 offset-sm-2">
+      <input type="text" class="text-center form-control" onblur="upper()" class="edit_val" id="fname" name="name" size="20" placeholder="Please Enter Your Full Name">
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="row">
+    <label for="about"><h5 class="text-primary">About me</h5></label>
+  </div>
+  <div class="row">
+   <textarea name="about" id="about" rows="4" class="form-control" cols="100"></textarea>
+  </div>
+</div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <label for="uname"><h5 class="text-primary">Username</h5></label>
+            </div>
+            <div class="col-md-6 text-center">
+              <label for="pass"><h5 class="text-primary">Password</h5></label>
+            </div>
+          </div>
+        </div>
+
+<div class="form-group">
+  <div class="row">
+  <div class="col-md-6">
+  <input type="text" disabled id="uname" value="&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;" class="form-control" >
+  </div>
+  <div class="col-md-6">
+  <input type="text" class="form-control" id="pass" disabled value="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+  </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="row">
+  <div class="col-md-6 text-center">
+    <label for="email"><h5 class="text-primary">Email</h5></label>
+  </div>
+  <div class="col-md-6 text-center">
+    <label for="loc"><h5 class="text-primary">Location</h5></label>
+  </div>
+  </div>
+</div>
+<div class="form-group">
+  <div class="row">
+  <div class="col-md-6">
+  <input type="text" id="email" disabled class="form-control" value="me@example.com">
+  </div>
+  <div class="col-md-6">
+  <input type="text" name="loc" id="loc" class="form-control" placeholder="e.g. New Delhi">
+  </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="row">
+    <div class="col-12 col-sm-6 form-group text-center">
+<button value="cancel" class="btn btn-lg btn-danger">Cancel</button>
+    </div>
+    <div class="col-12 col-sm-6 form-group text-center">
+<button type="submit" class="btn btn-lg btn-success">Save</button>
+    </div>
+  </div>
+</div>
+    </form>
     </div>
       </div>
-
-  <div class="text-center">
-        <input type="text" class="text-center" name="name" size="30" placeholder="Full Name">
-  </div>
-
-
-        <div class="details">
-        <div class="row">
-        <h5>About me</h5>
         </div>
-        <div class="row">
-         <textarea name="about" rows="4" cols="800"></textarea>
-        </div>
-
-
-        <div class="row">
-        <div class="col-md-6">
-        <h5>Username</h5>
-        </div>
-        <div class="col-md-6">
-        <h5>Password</h5>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6">
-        <input type="text" name="username" value="">
-        </div>
-        <div class="col-md-6">
-        <input type="text" name="password" value="">
-        </div>
-        </div>
-
-        <div class="row">
-        <div class="col-md-6">
-        <h5>Email</h5>
-        </div>
-        <div class="col-md-6">
-        <h5>Location</h5>
-        </div>
-        </div>
-
-        <div class="row">
-        <div class="col-md-6">
-        <input type="text" name="email" value="">
-        </div>
-        <div class="col-md-6">
-        <input type="text" name="loc" value="">
-        </div>
-        </div>
-
-
-        </div>
-            <input type="submit" value="Cancel" name="cancel">
-      <input type="submit" value="Submit">
-      </form>
-    </fieldset>
+          </div>
   </div>
 </body>
 </html>
