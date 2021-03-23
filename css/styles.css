@@ -92,6 +92,22 @@ font-size: 20px;
   float: right;
   font-size:20px;
 }
+#hr,#min,#sec{
+  margin-right:2px;
+  margin-left: 2px;
+}
+#hr::after,#min::after{
+  content:":";
+}
+.time{
+  display: inline-block;
+  width:200px;
+  padding: 10px;
+  font-size: 25px;
+    border-radius: 50px;
+  border:1px solid #007bff;
+    margin-top:15px;
+}
 .logout:hover{
   background-color:#28a745;
   color:#fff;

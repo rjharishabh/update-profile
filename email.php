@@ -47,11 +47,16 @@ else {
   <body>
     <div class="container">
       <div class="row">
-    <div class="col-6">
+    <div class="col-12 col-md-4">
       <a href="index.php"><h3 class="head text-white">Update Profile</h3></a>
     </div>
-    <div class="col-6">
-    <p class="ip">Your IP Address is <?=$_SERVER['REMOTE_ADDR']?></p>
+    <div class="col-12 col-md-4 text-center">
+      <div class="time">
+      <span id="hr">HH</span><span id="min">MM</span><span id="sec">SS</span>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+    <p class="ip text-center">Your IP Address is <?=$_SERVER['REMOTE_ADDR']?></p>
     </div>
       </div>
       <div class="row">
