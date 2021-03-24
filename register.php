@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Sign Up</title>
+    <title>Register</title>
     <link rel="icon" href="imgs/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -83,7 +83,7 @@
                 </div>
 
               <div class="form-group text-center">
-                <button type="submit" class="btn btn-lg btn-primary">Sign Up</button>
+                <button type="submit" class="btn btn-lg btn-primary">Register</button>
               </div>
                   <div class="form-group text-center">
                   <h5>Already have an account?<a href="login.php">Log In</a></h5>

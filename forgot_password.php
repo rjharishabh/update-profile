@@ -1,44 +1,28 @@
- <?php
+<?php
 session_start();
-if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
-  $_SESSION['user']=$_POST['username'];
-  $_SESSION['email']=$_POST['email'];
-  $_SESSION['password']=$_POST['password'];
-  $code="123456";
-  $to = $_SESSION['email'];
-  $subject = "Verify email address";
-  // for ($i=1; $i <=6 ; $i++) {
-  //   $code=$code.rand(0,9);
-  // }
-    $_SESSION['code']=$code;
-  $txt = $code." is your verification code for acoount creation.";
-  $headers = "From: update@example.com";
-  // mail($to,$subject,$txt,$headers);
-
+require_once 'db.php';
+if(isset($_POST['fuser'])){
+$sql="SELECT * FROM USER WHERE username=:un";
+$stmt=$db->prepare($sql);
+$stmt->execute(array(
+  ':un' => $_POST['fpuser']
+));
+$row=$stmt->fetch(PDO::FETCH_ASSOC);
+if($row===false){
+  $_SESSION['error']="Incorrect Username";
+  header('Location:forgot_password.php');
 }
 else {
-  if (!isset($_SESSION['email'])) {
-    header('Location:register.php');
-  }
-  $code="123456";
-  $to = $_SESSION['email'];
-  $subject = "Verify email address";
-  // for ($i=1; $i <=6 ; $i++) {
-  //   $code=$code.rand(0,9);
-  // }
-    $_SESSION['code']=$code;
-  $txt = $code." is your verification code for account creation.";
-  $headers = "From: update@example.com";
-  // mail($to,$subject,$txt,$headers);
+$_SESSION['email']=$row['email'];
+header('Location:fpemailAuth.php');
 }
-
-
- ?>
+}
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Verify Your Email</title>
+    <title>Forgot Password</title>
 <link rel="icon" href="imgs/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -63,7 +47,7 @@ else {
       <div class="row">
         <div class="col justify-content-center">
           <div class="card mx-auto">
-            <h1 class="text-center text-primary">Verify Your Email</h1>
+            <h1 class="text-center text-primary">Forgot Password</h1>
             <div class="card-body">
               <?php
               if(isset($_SESSION['error'])){
@@ -72,29 +56,23 @@ else {
       <span aria-hidden='true'>&times;</span></button></div>");
                 unset($_SESSION['error']);
               }?>
-              <form action="editprofile.php" method="post">
-              <?php
-              echo ("<h4 class='text-center text-success'>We&#39;ve sent an email with your code to <strong>".$_SESSION['email']."</strong>, please enter the code here.</h4>");
-               ?>
+              <form action="fpemailAuth.php" method="post">
                <div class="form-group">
                  <div class="row">
                    <div class="col-12">
                      <fieldset>
-                       <legend><h4 class="text-primary">Enter the code</h4></legend>
-                         <input type="text" class="email-input form-control" name="verify" required placeholder="123456">
+                       <legend><h5 class="text-primary">Enter the Username</h5></legend>
+                         <input type="text" class="email-input form-control" name="fpuser" required placeholder="Username">
                           </fieldset>
                    </div>
                      </div>
                </div>
               <div class="form-group text-center">
-                <button type="submit" class="btn btn-lg btn-primary">Verify</button>
-              </div>
-              <div class="form-group text-center">
-              <h5>Didn't receive an email?<a href="email.php">Resend</a></h5>
+                <button type="submit" class="btn btn-lg btn-primary">Next</button>
               </div>
                 </form>
               <div class="form-group text-center">
-                <a href="register.php" class="btn btn-lg btn-secondary">Go Back</a>
+                <a href="login.php" class="btn btn-lg btn-secondary">Go Back</a>
               </div>
                   </div>
             </div>

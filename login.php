@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (isset($_SESSION['id'])) {
+  header('Location:profile.php');
+  return;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -32,7 +36,7 @@ session_start();
       <div class="card mx-auto">
         <h1 class="text-center text-primary">Log In</h1>
         <div class="card-body">
-          <form action="loginAuth.php" method="post">
+          <form action="profile.php" method="post">
             <?php
             if(isset($_SESSION['error'])){
               echo ("<div class='alert text-center alert-danger alert-dismissible fade show' role='alert'>
@@ -53,7 +57,7 @@ session_start();
 </div>
 <div class="col-8">
     <input type="text" name="username" class="form-control" required placeholder="Username" id="username">
-    <a href="#" class="forgot">forgot username</a>
+    <a href="forgot_username.php" class="forgot">forgot username</a>
 </div>
       </div>
             </div>
@@ -64,7 +68,7 @@ session_start();
         </div>
         <div class="col-8">
     <input  class="form-control" type="password" name="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" id="password">
-      <a href="fpass.php" class="forgot">forgot password</a>
+      <a href="forgot_password.php" class="forgot">forgot password</a>
 </div>
 <div class="col-1"  onclick="change()">
     <img class="eye" id="pass" src="imgs/eye-slash.svg" alt="i-slash">
@@ -75,7 +79,7 @@ session_start();
             <button type="submit" class="btn btn-lg btn-primary">Log In</button>
           </div>
               <div class="form-group text-center">
-              <h5>Don't have an account?<a href="signup.php">Sign Up</a></h5>
+              <h5>Don't have an account?<a href="register.php">Register</a></h5>
               </div>
           </form>
               </div>

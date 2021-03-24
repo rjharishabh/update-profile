@@ -1,43 +1,81 @@
    <?php
 session_start();
 require_once 'db.php';
-if(isset($_POST['verify'])){
-  if($_SESSION['code']==$_POST['verify']){
-    $query="INSERT INTO user (username,email,password) VALUES (:un,:em,:pw)";
-    $stmt=$db->prepare($query);
-    $stmt->execute(array(
-    ':un'=>$_SESSION['user'],
-    ':em'=>$_SESSION['email'],
-    ':pw'=>$_SESSION['password'],
-    ));
-  }
-  else{
-    $_SESSION['error']="Incorrect code";
-    header('Location:email.php');
-  }
+if (!isset($_SESSION['id'])) {
+  header('Location:login.php');
+  return;
+}
+if (isset($_POST['cancel'])) {
+  header('Location:profile.php');
+  return;
+}
+
+else if (isset($_POST['save'])) {
+  $query="UPDATE DETAA SET name=:name, about=:abt, location=:loc WHERE id=:id";
+  $stmt=$db->prepare($query);
+  $stmt->execute(array(
+    ':name'=>$_POST['name'],
+    ':abt'=>$_POST['about'],
+    ':loc'=>$_POST['loc'],
+    ':id'=>$_SESSION['id']
+));
+
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["pic"]["name"]);
+    move_uploaded_file($_FILES["pic"]["tmp_name"], $target_file);
+    $q="UPDATE DETAA SET image=:im WHERE id=:id";
+    $s=$db->prepare($q);
+    $s->execute(array(
+      ':im'=>$target_file,
+      ':id'=>$_SESSION['id']
+  ));
+
+header('Location:profile.php');
+return;
 }
 else {
-  $_SESSION['error']="Please enter the code";
-    header('Location:email.php');
+  $img='imgs/blank.png';
+  $name="";
+  $abt="Please write about yourself.";
+  $loc="";
+  $query="SELECT * FROM USER WHERE id=:id";
+  $stmt=$db->prepare($query);
+  $stmt->execute(array(':id'=>$_SESSION['id']));
+  $row=$stmt->fetch(PDO::FETCH_ASSOC);
+  $sql="SELECT * FROM DETAA WHERE id=:id";
+  $det=$db->prepare($sql);
+  $det->execute(array(':id'=>$_SESSION['id']));
+  $row2=$det->fetch(PDO::FETCH_ASSOC);
+  if($row2['image']!==NULL)
+  $img=$row2['image'];
+  if($row2['name']!==NULL)
+  $name=$row2['name'];
+  if($row2['about']!==NULL)
+  $abt=$row2['about'];
+  if($row2['location']!==NULL)
+  $loc=$row2['location'];
 }
 
-if (isset($_POST['name'])&&isset($_POST['about'])&&isset($_POST['loc'])) {
-  $target_dir = "imgs/";
-  $target_file = $target_dir . basename($_FILES["picFile"]["name"]);
-$_SESSION['img']=$target_file;
-  move_uploaded_file($_FILES["picFile"]["tmp_name"], $target_file);
 
 
-$query="INSERT INTO DETA(name,about,location,image) VALUES (:name,:about,:loc,:im)";
-$stmt=$db->prepare($query);
-$stmt->execute(array(':name' => $_POST['name'],
-':about'=>$_POST['about'],
-':loc'=>$_POST['loc'],
-':im'=>$target_file
- ));
-
-header('Location:viewprofile.php');
-}
+//
+// if (isset($_POST['name'])&&isset($_POST['about'])&&isset($_POST['loc'])) {
+//   $target_dir = "imgs/";
+//   $target_file = $target_dir . basename($_FILES["picFile"]["name"]);
+// $_SESSION['img']=$target_file;
+//   move_uploaded_file($_FILES["picFile"]["tmp_name"], $target_file);
+//
+//
+// $query="INSERT INTO DETA(name,about,location,image) VALUES (:name,:about,:loc,:im)";
+// $stmt=$db->prepare($query);
+// $stmt->execute(array(':name' => $_POST['name'],
+// ':about'=>$_POST['about'],
+// ':loc'=>$_POST['loc'],
+// ':im'=>$target_file
+//  ));
+//
+// header('Location:viewprofile.php');
+// }
 
   ?>
 
@@ -47,7 +85,7 @@ header('Location:viewprofile.php');
   <head>
     <meta charset="utf-8">
     <title>Edit Your Profile</title>
-    <link rel="icon" href="imgs/favicon.ico">
+    <link rel="icon"  <?=htmlentities("href=".$img); ?> >
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/styles.css">
@@ -81,7 +119,7 @@ header('Location:viewprofile.php');
         <form action="" enctype="multipart/form-data" method="post">
               <div class="form-group">
                 <div class="row">
-  <img src="imgs/blank.png" id="profile_pic" class="img-thumbnail img-fluid" alt="profile-pic">
+  <img <?=htmlentities("src=".$img); ?> id="profile_pic" class="img-thumbnail img-fluid" alt="profile-pic">
 </div>
 <div class="row justify-content-center">
   <div class="p-pic text-center">
@@ -90,13 +128,13 @@ header('Location:viewprofile.php');
   </div>
 </div>
 <div class="row">
-    <input type="file" id="pic" onchange="replace_file_name()" name="picFile">
+    <input type="file" id="pic" onchange="replace_file_name()" name="pic">
 </div>
       </div>
 <div class="form-group">
   <div class="row">
     <div class="col-12 col-sm-8 offset-sm-2">
-      <input type="text" class="text-center form-control" onblur="upper()" class="edit_val" id="fname" name="name" size="20" placeholder="Please Enter Your Full Name">
+      <input type="text" class="text-center form-control" onblur="upper()" class="edit_val" id="fname" name="name" size="20" placeholder="Please Enter Your Full Name" <?php echo "value=".$name; ?> >
     </div>
   </div>
 </div>
@@ -106,7 +144,7 @@ header('Location:viewprofile.php');
     <label for="about"><h5 class="text-primary">About me</h5></label>
   </div>
   <div class="row">
-   <textarea name="about" id="about" rows="4" class="form-control" cols="100"></textarea>
+   <textarea name="about" id="about" rows="4" class="form-control" cols="100"><?=$abt; ?></textarea>
   </div>
 </div>
         <div class="form-group">
@@ -123,10 +161,12 @@ header('Location:viewprofile.php');
 <div class="form-group">
   <div class="row">
   <div class="col-md-6">
-  <input type="text" disabled id="uname" value="&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;" class="form-control" >
+  <input type="text" disabled id="uname" value="&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;" class="form-control">
+  <small class="form-text text-center text-muted">We don't know your username.</small>
   </div>
   <div class="col-md-6">
   <input type="text" class="form-control" id="pass" disabled value="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+  <small class="form-text text-center text-muted">We don't know your password.</small>
   </div>
   </div>
 </div>
@@ -144,10 +184,11 @@ header('Location:viewprofile.php');
 <div class="form-group">
   <div class="row">
   <div class="col-md-6">
-  <input type="text" id="email" disabled class="form-control" value="me@example.com">
+  <input type="text" id="email" disabled class="form-control" <?="value=".$row['email']; ?> >
   </div>
   <div class="col-md-6">
-  <input type="text" name="loc" id="loc" class="form-control" placeholder="e.g. New Delhi">
+    <?php echo "<input type='text' name='loc' id='loc' class='form-control'  placeholder='e.g. New Delhi' value=".$loc.">" ?>
+
   </div>
   </div>
 </div>
@@ -155,10 +196,10 @@ header('Location:viewprofile.php');
 <div class="form-group">
   <div class="row">
     <div class="col-12 col-sm-6 form-group text-center">
-<button value="cancel" class="btn btn-lg btn-danger">Cancel</button>
+<button  name="cancel" type="submit" class="btn btn-lg btn-danger">Cancel</button>
     </div>
     <div class="col-12 col-sm-6 form-group text-center">
-<button type="submit" class="btn btn-lg btn-success">Save</button>
+<button type="submit" name="save" class="btn btn-lg btn-success">Save</button>
     </div>
   </div>
 </div>

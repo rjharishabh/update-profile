@@ -47,5 +47,5 @@ document.getElementById('min').innerHTML=min;
 document.getElementById('sec').innerHTML=sec;
 }
 (function () {
-setInterval(time,100);
+setInterval(time,500);
 })();
