@@ -10,7 +10,7 @@
     <script src="js/script.js"></script>
     </head>
     <body>
-  <div class="container">
+<div class="container">
     <div class="row">
   <div class="col-12 col-md-4">
     <a href="index.php"><h3 class="head text-white">Update Profile</h3></a>

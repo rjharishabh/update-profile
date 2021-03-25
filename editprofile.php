@@ -1,6 +1,7 @@
    <?php
 session_start();
 require_once 'db.php';
+  $img='imgs/blank.png';
 if (!isset($_SESSION['id'])) {
   header('Location:login.php');
   return;
@@ -20,13 +21,14 @@ else if (isset($_POST['save'])) {
     ':id'=>$_SESSION['id']
 ));
 
-    $target_dir = "uploads/";
-    $target_file = $target_dir . basename($_FILES["pic"]["name"]);
+    $target_dir = "imgs/";
+    $basename=basename($_FILES["pic"]["name"]);
+    $target_file = $target_dir . $basename;
     move_uploaded_file($_FILES["pic"]["tmp_name"], $target_file);
     $q="UPDATE DETAA SET image=:im WHERE id=:id";
     $s=$db->prepare($q);
     $s->execute(array(
-      ':im'=>$target_file,
+      ':im'=>$basename,
       ':id'=>$_SESSION['id']
   ));
 
@@ -34,7 +36,6 @@ header('Location:profile.php');
 return;
 }
 else {
-  $img='imgs/blank.png';
   $name="";
   $abt="Please write about yourself.";
   $loc="";
@@ -47,7 +48,7 @@ else {
   $det->execute(array(':id'=>$_SESSION['id']));
   $row2=$det->fetch(PDO::FETCH_ASSOC);
   if($row2['image']!==NULL)
-  $img=$row2['image'];
+  $img="imgs/".$row2['image'];
   if($row2['name']!==NULL)
   $name=$row2['name'];
   if($row2['about']!==NULL)

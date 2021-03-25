@@ -1,22 +1,5 @@
 <?php
 session_start();
-require_once 'db.php';
-if(isset($_POST['fuser'])){
-$sql="SELECT * FROM USER WHERE username=:un";
-$stmt=$db->prepare($sql);
-$stmt->execute(array(
-  ':un' => $_POST['fpuser']
-));
-$row=$stmt->fetch(PDO::FETCH_ASSOC);
-if($row===false){
-  $_SESSION['error']="Incorrect Username";
-  header('Location:forgot_password.php');
-}
-else {
-$_SESSION['email']=$row['email'];
-header('Location:fpemailAuth.php');
-}
-}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -56,7 +39,7 @@ header('Location:fpemailAuth.php');
       <span aria-hidden='true'>&times;</span></button></div>");
                 unset($_SESSION['error']);
               }?>
-              <form action="fpemailAuth.php" method="post">
+              <form action="email" method="post">
                <div class="form-group">
                  <div class="row">
                    <div class="col-12">

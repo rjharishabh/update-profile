@@ -1,5 +1,6 @@
  <?php
 session_start();
+require_once 'db.php';
 if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
   $_SESSION['user']=$_POST['username'];
   $_SESSION['email']=$_POST['email'];
@@ -14,11 +15,39 @@ if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['passwor
   $txt = $code." is your verification code for acoount creation.";
   $headers = "From: update@example.com";
   // mail($to,$subject,$txt,$headers);
-
+  $_SESSION['action']="editprofile.php";
+}
+elseif (isset($_POST['fpuser'])) {
+  $sql="SELECT * FROM USER WHERE username=:un";
+  $stmt=$db->prepare($sql);
+  $stmt->execute(array(
+    ':un' => $_POST['fpuser']
+  ));
+  $row=$stmt->fetch(PDO::FETCH_ASSOC);
+  if($row===false){
+    $_SESSION['error']="Incorrect Username";
+    header('Location:forgot_password.php');
+    return;
+  }
+  else {
+  $_SESSION['email']=$row['email'];
+  $_SESSION['action']="new_password.php";
+  $code="123456";
+  $to = $_SESSION['email'];
+  $subject = "Verify email address";
+  // for ($i=1; $i <=6 ; $i++) {
+  //   $code=$code.rand(0,9);
+  // }
+    $_SESSION['code']=$code;
+  $txt = $code." is your verification code for account creation.";
+  $headers = "From: update@example.com";
+  // mail($to,$subject,$txt,$headers);
+  }
 }
 else {
   if (!isset($_SESSION['email'])) {
-    header('Location:register.php');
+    header('Location:login.php');
+    return;
   }
   $code="123456";
   $to = $_SESSION['email'];
@@ -72,7 +101,7 @@ else {
       <span aria-hidden='true'>&times;</span></button></div>");
                 unset($_SESSION['error']);
               }?>
-              <form action="editprofile.php" method="post">
+              <form <?php echo "action=".$_SESSION['action']; ?> method="post">
               <?php
               echo ("<h4 class='text-center text-success'>We&#39;ve sent an email with your code to <strong>".$_SESSION['email']."</strong>, please enter the code here.</h4>");
                ?>
@@ -87,14 +116,21 @@ else {
                      </div>
                </div>
               <div class="form-group text-center">
-                <button type="submit" class="btn btn-lg btn-primary">Verify</button>
+                <button type="submit" name="submit" class="btn btn-lg btn-primary">Verify</button>
               </div>
               <div class="form-group text-center">
               <h5>Didn't receive an email?<a href="email.php">Resend</a></h5>
               </div>
                 </form>
               <div class="form-group text-center">
-                <a href="register.php" class="btn btn-lg btn-secondary">Go Back</a>
+                <?php
+                if($_SESSION['action']==='editprofile.php'){
+                  echo "<a href='register.php' class='btn btn-lg btn-secondary'>Go Back</a>";
+                }
+                else {
+            echo "<a href='forgot_password.php' class='btn btn-lg btn-secondary'>Go Back</a>";
+                }
+                ?>
               </div>
                   </div>
             </div>

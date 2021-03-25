@@ -27,7 +27,7 @@ $det=$db->prepare($sql);
 $det->execute(array(':id'=>$_SESSION['id']));
 $row2=$det->fetch(PDO::FETCH_ASSOC);
 if($row2['image']!==NULL)
-$img=$row2['image'];
+  $img="imgs/".$row2['image'];
 if($row2['name']!==NULL)
 $name=$row2['name'];
 if($row['about']!==NULL)
@@ -53,7 +53,7 @@ else {
   $det->execute(array(':id'=>$_SESSION['id']));
   $row2=$det->fetch(PDO::FETCH_ASSOC);
   if($row2['image']!==NULL)
-  $img=$row2['image'];
+  $img="imgs/".$row2['image'];
   if($row2['name']!==NULL)
   $name=$row2['name'];
   if($row2['about']!==NULL)
@@ -85,7 +85,7 @@ else {
 <head>
  <meta charset="utf-8">
  <title><?=$name; ?></title>
- <link rel="icon"  <?=htmlentities("href=".$img); ?> >
+ <link rel="icon"  <? echo("href=".$img); ?> >
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/styles.css">

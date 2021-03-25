@@ -57,7 +57,6 @@ if (isset($_SESSION['id'])) {
 </div>
 <div class="col-8">
     <input type="text" name="username" class="form-control" required placeholder="Username" id="username">
-    <a href="forgot_username.php" class="forgot">forgot username</a>
 </div>
       </div>
             </div>
