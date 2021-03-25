@@ -2,10 +2,47 @@
 session_start();
 require_once 'db.php';
   $img='imgs/blank.png';
-if (!isset($_SESSION['id'])) {
-  header('Location:login.php');
-  return;
-}
+  $name="";
+  $abt="Please write about yourself.";
+  $loc="";
+  if (isset($_POST['submit'])) {
+    if($_SESSION['code']!=$_POST['verify']){
+      $_SESSION['error']="Incorrect Code";
+      unset($_SESSION['code']);
+      header('Location:email.php');
+      return;
+    }
+    else {
+      $query="INSERT INTO USER(username,email,password) VALUES (:u,:e,:p)";
+      $stmt=$db->prepare($query);
+      $stmt->execute(array(':u' => $_SESSION['user'],
+      ':e'=>$_SESSION['email'],
+      ':p'=>$_SESSION['password']
+       ));
+       unset($_SESSION['user']);
+       // unset($_SESSION['email']);
+       unset($_SESSION['password']);
+       unset($_SESSION['action']);
+       unset($_SESSION['code']);
+       $sql="SELECT * FROM USER WHERE email=:e";
+       $s=$db->prepare($sql);
+       $s->execute(array(
+         ':e'=>$_SESSION['email']
+       ));
+       $row=$s->fetch(PDO::FETCH_ASSOC);
+       $_SESSION['id']=$row['id'];
+       unset($_SESSION['email']);
+       $c="INSERT INTO DETAA(id) VALUES(:id)";
+       $st=$db->prepare($c);
+       $st->execute(array(
+         ':id'=>$_SESSION['id']
+     ));
+    }
+  }
+
+
+
+
 if (isset($_POST['cancel'])) {
   header('Location:profile.php');
   return;
@@ -36,9 +73,6 @@ header('Location:profile.php');
 return;
 }
 else {
-  $name="";
-  $abt="Please write about yourself.";
-  $loc="";
   $query="SELECT * FROM USER WHERE id=:id";
   $stmt=$db->prepare($query);
   $stmt->execute(array(':id'=>$_SESSION['id']));
@@ -57,7 +91,10 @@ else {
   $loc=$row2['location'];
 }
 
-
+if (!isset($_SESSION['id'])) {
+  header('Location:login.php');
+  return;
+}
 
 //
 // if (isset($_POST['name'])&&isset($_POST['about'])&&isset($_POST['loc'])) {

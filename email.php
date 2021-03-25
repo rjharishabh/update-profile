@@ -1,21 +1,26 @@
  <?php
 session_start();
 require_once 'db.php';
-if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
-  $_SESSION['user']=$_POST['username'];
-  $_SESSION['email']=$_POST['email'];
-  $_SESSION['password']=$_POST['password'];
-  $code="123456";
-  $to = $_SESSION['email'];
-  $subject = "Verify email address";
-  // for ($i=1; $i <=6 ; $i++) {
-  //   $code=$code.rand(0,9);
-  // }
-    $_SESSION['code']=$code;
-  $txt = $code." is your verification code for acoount creation.";
-  $headers = "From: update@example.com";
-  // mail($to,$subject,$txt,$headers);
-  $_SESSION['action']="editprofile.php";
+if (isset($_POST['register'])) {
+  if ($_POST['password']!==$_POST['cpassword']) {
+    $_SESSION['error']="Password and Confirm Password should be same.";
+    header('location:register.php');
+    return;
+  }
+    $_SESSION['user']=$_POST['username'];
+    $_SESSION['email']=$_POST['email'];
+    $_SESSION['password']=$_POST['password'];
+    $code="123456";
+    $to = $_SESSION['email'];
+    $subject = "Verify email address";
+    // for ($i=1; $i <=6 ; $i++) {
+    //   $code=$code.rand(0,9);
+    // }
+      $_SESSION['code']=$code;
+    $txt = $code." is your verification code for acoount creation.";
+    $headers = "From: update@example.com";
+    // mail($to,$subject,$txt,$headers);
+    $_SESSION['action']="editprofile.php";
 }
 elseif (isset($_POST['fpuser'])) {
   $sql="SELECT * FROM USER WHERE username=:un";

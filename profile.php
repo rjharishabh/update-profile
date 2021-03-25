@@ -34,8 +34,8 @@ if($row['about']!==NULL)
 $abt=$row['about'];
 if($row['location']!==NULL)
 $loc=$row['location'];
-header('Location:profile.php');
-return;
+// header('Location:profile.php');
+// return;
 }
 }
 

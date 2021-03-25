@@ -6,7 +6,7 @@ if (!isset($_SESSION['email'])) {
   return;
 }
 if (isset($_POST['submit'])) {
-  if($_SESSION['code']!=$_POST['verify']){
+  if($_SESSION['code']!==$_POST['verify']){
     $_SESSION['error']="Incorrect Code";
     unset($_SESSION['code']);
     header('Location:email.php');

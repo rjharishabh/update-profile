@@ -14,8 +14,8 @@ function signup() {
         document.getElementById('ctick').innerHTML="<img class='eye' src='imgs/tick.svg' alt='tick'>";
       }
       else{
-        document.getElementById('tick').innerHTML="<img class='eye' src='imgs/cross.svg' alt='cross'>";;
-       document.getElementById('ctick').innerHTML="<img class='eye' src='imgs/cross.svg' alt='cross'>";;
+        document.getElementById('tick').innerHTML="<img class='eye' src='imgs/cross.svg' alt='cross'>";
+       document.getElementById('ctick').innerHTML="<img class='eye' src='imgs/cross.svg' alt='cross'>";
       }
     }
     else {

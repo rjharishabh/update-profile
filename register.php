@@ -1,3 +1,6 @@
+<?php
+session_start();
+ ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -32,6 +35,14 @@
             <h1 class="text-center text-primary">Create Account</h1>
             <div class="card-body">
               <form action="email.php" method="post" ng-controller="signup_form as signup">
+                <?php
+                if(isset($_SESSION['error'])){
+                  echo ("<div class='alert text-center alert-danger alert-dismissible fade show' role='alert'>
+      <strong>".$_SESSION['error']."</strong><button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>&times;</span></button></div>");
+                  unset($_SESSION['error']);
+                }
+                ?>
                 <div class="form-group">
                   <div class="row">
                     <div class="col-12">
@@ -83,7 +94,7 @@
                 </div>
 
               <div class="form-group text-center">
-                <button type="submit" class="btn btn-lg btn-primary">Register</button>
+                <button type="submit" name="register" class="btn btn-lg btn-primary">Register</button>
               </div>
                   <div class="form-group text-center">
                   <h5>Already have an account?<a href="login.php">Log In</a></h5>
