@@ -12,12 +12,12 @@ if (isset($_POST['register'])) {
     $_SESSION['password']=$_POST['password'];
     $code="123456";
     $to = $_SESSION['email'];
-    $subject = "Verify email address";
+    $subject = "Please verify your email";
     // for ($i=1; $i <=6 ; $i++) {
     //   $code=$code.rand(0,9);
     // }
       $_SESSION['code']=$code;
-    $txt = $code." is your verification code for acoount creation.";
+    $txt = "This message has been sent to you because you entered your email on a registration form. If it wasn't you, please ignore this message.". $code." is your verification code for registration. Please don't reply to this mail, it is computer generated.";
     $headers = "From: update@example.com";
     // mail($to,$subject,$txt,$headers);
     $_SESSION['action']="editprofile.php";
@@ -39,12 +39,12 @@ elseif (isset($_POST['fpuser'])) {
   $_SESSION['action']="new_password.php";
   $code="123456";
   $to = $_SESSION['email'];
-  $subject = "Verify email address";
+    $subject = "Please verify your email";
   // for ($i=1; $i <=6 ; $i++) {
   //   $code=$code.rand(0,9);
   // }
     $_SESSION['code']=$code;
-  $txt = $code." is your verification code for account creation.";
+    $txt = "This message has been sent to you because you entered your email on a registration form. If it wasn't you, please ignore this message.". $code." is your verification code for registration. Please don't reply to this mail, it is computer generated.";
   $headers = "From: update@example.com";
   // mail($to,$subject,$txt,$headers);
   }

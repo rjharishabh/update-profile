@@ -4,7 +4,7 @@ require_once 'db.php';
   $img='imgs/blank.png';
   $name="";
   $abt="Please write about yourself.";
-  $loc="";
+  $loc="N/A";
   if (isset($_POST['submit'])) {
     if($_SESSION['code']!=$_POST['verify']){
       $_SESSION['error']="Incorrect Code";
@@ -15,12 +15,11 @@ require_once 'db.php';
     else {
       $query="INSERT INTO USER(username,email,password) VALUES (:u,:e,:p)";
       $stmt=$db->prepare($query);
-      $stmt->execute(array(':u' => $_SESSION['user'],
+      $stmt->execute(array(':u' => hash('sha256',$_SESSION['user']),
       ':e'=>$_SESSION['email'],
-      ':p'=>$_SESSION['password']
+      ':p'=>hash('sha256',$_SESSION['password'])
        ));
        unset($_SESSION['user']);
-       // unset($_SESSION['email']);
        unset($_SESSION['password']);
        unset($_SESSION['action']);
        unset($_SESSION['code']);
@@ -40,9 +39,6 @@ require_once 'db.php';
     }
   }
 
-
-
-
 if (isset($_POST['cancel'])) {
   header('Location:profile.php');
   return;
@@ -58,16 +54,26 @@ else if (isset($_POST['save'])) {
     ':id'=>$_SESSION['id']
 ));
 
-    $target_dir = "imgs/";
+  $com="SELECT image FROM DETAA WHERE id=:id";
+  $st=$db->prepare($com);
+  $st->execute(array(
+  ':id'=>$_SESSION['id']
+));
+  $r=$st->fetch(PDO::FETCH_ASSOC);
+    $target_dir = "uploads/";
     $basename=basename($_FILES["pic"]["name"]);
-    $target_file = $target_dir . $basename;
-    move_uploaded_file($_FILES["pic"]["tmp_name"], $target_file);
-    $q="UPDATE DETAA SET image=:im WHERE id=:id";
-    $s=$db->prepare($q);
-    $s->execute(array(
-      ':im'=>$basename,
-      ':id'=>$_SESSION['id']
-  ));
+    $p=$r['image'];
+    if ($p!==$_SESSION['id']."_".$basename) {
+      unlink("uploads/".$p);
+      $target_file = $target_dir.$_SESSION['id']."_".$basename;
+      move_uploaded_file($_FILES["pic"]["tmp_name"], $target_file);
+      $q="UPDATE DETAA SET image=:im WHERE id=:id";
+      $s=$db->prepare($q);
+      $s->execute(array(
+        ':im'=>$_SESSION['id']."_".$basename,
+        ':id'=>$_SESSION['id']
+    ));
+    }
 
 header('Location:profile.php');
 return;
@@ -81,13 +87,13 @@ else {
   $det=$db->prepare($sql);
   $det->execute(array(':id'=>$_SESSION['id']));
   $row2=$det->fetch(PDO::FETCH_ASSOC);
-  if($row2['image']!==NULL)
-  $img="imgs/".$row2['image'];
-  if($row2['name']!==NULL)
+  if($row2['image']!==NULL && $row2['image']!=="")
+  $img="uploads/".$row2['image'];
+  if($row2['name']!==NULL && $row2['name']!=="")
   $name=$row2['name'];
-  if($row2['about']!==NULL)
+  if($row2['about']!==NULL && $row2['about']!=="")
   $abt=$row2['about'];
-  if($row2['location']!==NULL)
+  if($row2['location']!==NULL && $row2['location']!=="")
   $loc=$row2['location'];
 }
 
@@ -95,35 +101,13 @@ if (!isset($_SESSION['id'])) {
   header('Location:login.php');
   return;
 }
-
-//
-// if (isset($_POST['name'])&&isset($_POST['about'])&&isset($_POST['loc'])) {
-//   $target_dir = "imgs/";
-//   $target_file = $target_dir . basename($_FILES["picFile"]["name"]);
-// $_SESSION['img']=$target_file;
-//   move_uploaded_file($_FILES["picFile"]["tmp_name"], $target_file);
-//
-//
-// $query="INSERT INTO DETA(name,about,location,image) VALUES (:name,:about,:loc,:im)";
-// $stmt=$db->prepare($query);
-// $stmt->execute(array(':name' => $_POST['name'],
-// ':about'=>$_POST['about'],
-// ':loc'=>$_POST['loc'],
-// ':im'=>$target_file
-//  ));
-//
-// header('Location:viewprofile.php');
-// }
-
-  ?>
-
-
+ ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title>Edit Your Profile</title>
-    <link rel="icon"  <?=htmlentities("href=".$img); ?> >
+    <link rel="icon"  <?=htmlentities("href=".$img.""); ?> >
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/styles.css">
@@ -157,7 +141,7 @@ if (!isset($_SESSION['id'])) {
         <form action="" enctype="multipart/form-data" method="post">
               <div class="form-group">
                 <div class="row">
-  <img <?=htmlentities("src=".$img); ?> id="profile_pic" class="img-thumbnail img-fluid" alt="profile-pic">
+  <img <?php echo "src='".$img."'"; ?> id="profile_pic" class="img-thumbnail img-fluid" alt="profile-pic">
 </div>
 <div class="row justify-content-center">
   <div class="p-pic text-center">
@@ -172,7 +156,7 @@ if (!isset($_SESSION['id'])) {
 <div class="form-group">
   <div class="row">
     <div class="col-12 col-sm-8 offset-sm-2">
-      <input type="text" class="text-center form-control" onblur="upper()" class="edit_val" id="fname" name="name" size="20" placeholder="Please Enter Your Full Name" <?php echo "value=".$name; ?> >
+      <input type="text" class="text-center form-control" onblur="upper()" class="edit_val" id="fname" name="name" size="20" placeholder="Please Enter Your Full Name" <?php echo "value='".$name."'"; ?> >
     </div>
   </div>
 </div>
@@ -182,7 +166,7 @@ if (!isset($_SESSION['id'])) {
     <label for="about"><h5 class="text-primary">About me</h5></label>
   </div>
   <div class="row">
-   <textarea name="about" id="about" rows="4" class="form-control" cols="100"><?=$abt; ?></textarea>
+   <textarea name="about" id="about" rows="4" class="form-control" cols="100"> <?=$abt ?> </textarea>
   </div>
 </div>
         <div class="form-group">
@@ -222,10 +206,10 @@ if (!isset($_SESSION['id'])) {
 <div class="form-group">
   <div class="row">
   <div class="col-md-6">
-  <input type="text" id="email" disabled class="form-control" <?="value=".$row['email']; ?> >
+  <input type="text" id="email" disabled class="form-control" <?="value='".$row['email']."'"; ?> >
   </div>
   <div class="col-md-6">
-    <?php echo "<input type='text' name='loc' id='loc' class='form-control'  placeholder='e.g. New Delhi' value=".$loc.">" ?>
+    <?php echo "<input type='text' name='loc' id='loc' class='form-control'  placeholder='e.g. New Delhi' value='".$loc."'>" ?>
 
   </div>
   </div>
