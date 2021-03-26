@@ -23,10 +23,10 @@ if (isset($_POST['register'])) {
     $_SESSION['action']="editprofile.php";
 }
 elseif (isset($_POST['fpuser'])) {
-  $sql="SELECT * FROM USER WHERE username=:un";
+  $sql="SELECT * FROM user WHERE username=:un";
   $stmt=$db->prepare($sql);
   $stmt->execute(array(
-    ':un' => $_POST['fpuser']
+    ':un' => hash('sha256',$_POST['fpuser'])
   ));
   $row=$stmt->fetch(PDO::FETCH_ASSOC);
   if($row===false){

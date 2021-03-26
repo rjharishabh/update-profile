@@ -13,7 +13,7 @@ require_once 'db.php';
       return;
     }
     else {
-      $query="INSERT INTO USER(username,email,password) VALUES (:u,:e,:p)";
+      $query="INSERT INTO user(username,email,password) VALUES (:u,:e,:p)";
       $stmt=$db->prepare($query);
       $stmt->execute(array(':u' => hash('sha256',$_SESSION['user']),
       ':e'=>$_SESSION['email'],
@@ -23,7 +23,7 @@ require_once 'db.php';
        unset($_SESSION['password']);
        unset($_SESSION['action']);
        unset($_SESSION['code']);
-       $sql="SELECT * FROM USER WHERE email=:e";
+       $sql="SELECT * FROM user WHERE email=:e";
        $s=$db->prepare($sql);
        $s->execute(array(
          ':e'=>$_SESSION['email']
@@ -31,7 +31,7 @@ require_once 'db.php';
        $row=$s->fetch(PDO::FETCH_ASSOC);
        $_SESSION['id']=$row['id'];
        unset($_SESSION['email']);
-       $c="INSERT INTO DETAA(id) VALUES(:id)";
+       $c="INSERT INTO detaa(id) VALUES(:id)";
        $st=$db->prepare($c);
        $st->execute(array(
          ':id'=>$_SESSION['id']
@@ -45,7 +45,7 @@ if (isset($_POST['cancel'])) {
 }
 
 else if (isset($_POST['save'])) {
-  $query="UPDATE DETAA SET name=:name, about=:abt, location=:loc WHERE id=:id";
+  $query="UPDATE detaa SET name=:name, about=:abt, location=:loc WHERE id=:id";
   $stmt=$db->prepare($query);
   $stmt->execute(array(
     ':name'=>$_POST['name'],
@@ -54,36 +54,42 @@ else if (isset($_POST['save'])) {
     ':id'=>$_SESSION['id']
 ));
 
-  $com="SELECT image FROM DETAA WHERE id=:id";
+  $com="SELECT image FROM detaa WHERE id=:id";
   $st=$db->prepare($com);
   $st->execute(array(
   ':id'=>$_SESSION['id']
 ));
   $r=$st->fetch(PDO::FETCH_ASSOC);
     $target_dir = "uploads/";
-    $basename=basename($_FILES["pic"]["name"]);
-    $p=$r['image'];
-    if ($p!==$_SESSION['id']."_".$basename) {
-      unlink("uploads/".$p);
-      $target_file = $target_dir.$_SESSION['id']."_".$basename;
-      move_uploaded_file($_FILES["pic"]["tmp_name"], $target_file);
-      $q="UPDATE DETAA SET image=:im WHERE id=:id";
-      $s=$db->prepare($q);
-      $s->execute(array(
-        ':im'=>$_SESSION['id']."_".$basename,
-        ':id'=>$_SESSION['id']
-    ));
+      $basename=basename($_FILES["pic"]["name"]);
+    if ($basename!=="") {
+      $basename=basename($_FILES["pic"]["name"]);
+      $p=$r['image'];
+      if ($p!==$_SESSION['id']."_".$basename) {
+        unlink("uploads/".$p);
+        $target_file = $target_dir.$_SESSION['id']."_".$basename;
+        if (!file_exists($target_file)) {
+          move_uploaded_file($_FILES["pic"]["tmp_name"], $target_file);
+          $q="UPDATE detaa SET image=:im WHERE id=:id";
+          $s=$db->prepare($q);
+          $s->execute(array(
+            ':im'=>$_SESSION['id']."_".$basename,
+            ':id'=>$_SESSION['id']
+        ));
+        }
+      }
     }
+
 
 header('Location:profile.php');
 return;
 }
 else {
-  $query="SELECT * FROM USER WHERE id=:id";
+  $query="SELECT * FROM user WHERE id=:id";
   $stmt=$db->prepare($query);
   $stmt->execute(array(':id'=>$_SESSION['id']));
   $row=$stmt->fetch(PDO::FETCH_ASSOC);
-  $sql="SELECT * FROM DETAA WHERE id=:id";
+  $sql="SELECT * FROM detaa WHERE id=:id";
   $det=$db->prepare($sql);
   $det->execute(array(':id'=>$_SESSION['id']));
   $row2=$det->fetch(PDO::FETCH_ASSOC);
@@ -166,7 +172,7 @@ if (!isset($_SESSION['id'])) {
     <label for="about"><h5 class="text-primary">About me</h5></label>
   </div>
   <div class="row">
-   <textarea name="about" id="about" rows="4" class="form-control" cols="100"> <?=$abt ?> </textarea>
+   <textarea name="about" id="about" rows="4" class="form-control" cols="100"><?=$abt; ?></textarea>
   </div>
 </div>
         <div class="form-group">

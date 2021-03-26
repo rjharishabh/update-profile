@@ -6,7 +6,7 @@ $abt="Please edit it.";
 $loc="N/A";
 require_once 'db.php';
 if (isset($_POST['username']) && isset($_POST['password'])) {
-$query="SELECT * FROM USER WHERE username=:un";
+$query="SELECT * FROM user WHERE username=:un";
 $stmt=$db->prepare($query);
 $stmt->execute(array(':un'=>hash('sha256',$_POST['username'])));
 $row=$stmt->fetch(PDO::FETCH_ASSOC);
@@ -22,7 +22,7 @@ else if ($row['password']!==hash('sha256',$_POST['password'])) {
 }
 else {
 $_SESSION['id']=$row['id'];
-$sql="SELECT * FROM DETAA WHERE id=:id";
+$sql="SELECT * FROM detaa WHERE id=:id";
 $det=$db->prepare($sql);
 $det->execute(array(':id'=>$_SESSION['id']));
 $row2=$det->fetch(PDO::FETCH_ASSOC);
@@ -41,11 +41,11 @@ else {
     header('Location:login.php');
     return;
   }
-  $query="SELECT * FROM USER WHERE id=:id";
+  $query="SELECT * FROM user WHERE id=:id";
   $stmt=$db->prepare($query);
   $stmt->execute(array(':id'=>$_SESSION['id']));
   $row=$stmt->fetch(PDO::FETCH_ASSOC);
-  $sql="SELECT * FROM DETAA WHERE id=:id";
+  $sql="SELECT * FROM detaa WHERE id=:id";
   $det=$db->prepare($sql);
   $det->execute(array(':id'=>$_SESSION['id']));
   $row2=$det->fetch(PDO::FETCH_ASSOC);

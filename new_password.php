@@ -21,10 +21,10 @@ if (isset($_POST['cngpass'])) {
     return;
   }
   else {
-    $query="UPDATE USER SET password=:pass WHERE email=:em";
+    $query="UPDATE user SET password=:pass WHERE email=:em";
     $stmt=$db->prepare($query);
     $stmt->execute(array(
-      ':pass'=>$_POST['password'],
+      ':pass'=>hash('sha256',$_POST['password']),
       ':em'=>$_SESSION['email']
     ));
     unset($_SESSION['email']);

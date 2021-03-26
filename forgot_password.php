@@ -39,7 +39,7 @@ session_start();
       <span aria-hidden='true'>&times;</span></button></div>");
                 unset($_SESSION['error']);
               }?>
-              <form action="email" method="post">
+              <form action="email.php" method="post">
                <div class="form-group">
                  <div class="row">
                    <div class="col-12">
