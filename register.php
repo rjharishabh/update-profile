@@ -13,6 +13,7 @@ session_start();
 <script src="js/angular.min.js"></script>
 <script src="js/app.js"></script>
 <script src="js/script.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body ng-app="signup">
     <div class="container">
@@ -92,7 +93,9 @@ session_start();
                       <div class="col-1" id="ctick"></div>
                       </div>
                 </div>
-
+                <div class="form-group">
+              <div class="g-recaptcha" data-sitekey="6Lf-ZawaAAAAAG3FrD-2zcOoIbW_9_vHYK-pYuTC"></div>
+                </div>
               <div class="form-group text-center">
                 <button type="submit" name="register" class="btn btn-lg btn-primary">Register</button>
               </div>

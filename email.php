@@ -2,25 +2,39 @@
 session_start();
 require_once 'db.php';
 if (isset($_POST['register'])) {
-  if ($_POST['password']!==$_POST['cpassword']) {
-    $_SESSION['error']="Password and Confirm Password should be same.";
-    header('location:register.php');
+  $secret="6Lf...SHi";
+  $res=$_POST['g-recaptcha-response'];
+  $url="https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$res";
+  $response=file_get_contents($url);
+  $response=json_decode($response);
+  if ($response->success) {
+    if ($_POST['password']!==$_POST['cpassword']) {
+      $_SESSION['error']="Password and Confirm Password should be same.";
+      header('location:register.php');
+      return;
+    }
+      $_SESSION['user']=$_POST['username'];
+      $_SESSION['email']=$_POST['email'];
+      $_SESSION['password']=$_POST['password'];
+      $code="123456";
+      $to = $_SESSION['email'];
+      $subject = "Please verify your email";
+      // for ($i=1; $i <=6 ; $i++) {
+      //   $code=$code.rand(0,9);
+      // }
+        $_SESSION['code']=$code;
+      $txt = "This message has been sent to you because you entered your email on a registration form. If it wasn't you, please ignore this message.". $code." is your verification code for registration. Please don't reply to this mail, it is computer generated.";
+      $headers = "From: update@example.com";
+      // mail($to,$subject,$txt,$headers);
+      $_SESSION['action']="editprofile.php";
+  }
+  else {
+    $_SESSION['error']="Captcha not verified";
+    header('Location:register.php');
     return;
   }
-    $_SESSION['user']=$_POST['username'];
-    $_SESSION['email']=$_POST['email'];
-    $_SESSION['password']=$_POST['password'];
-    $code="123456";
-    $to = $_SESSION['email'];
-    $subject = "Please verify your email";
-    // for ($i=1; $i <=6 ; $i++) {
-    //   $code=$code.rand(0,9);
-    // }
-      $_SESSION['code']=$code;
-    $txt = "This message has been sent to you because you entered your email on a registration form. If it wasn't you, please ignore this message.". $code." is your verification code for registration. Please don't reply to this mail, it is computer generated.";
-    $headers = "From: update@example.com";
-    // mail($to,$subject,$txt,$headers);
-    $_SESSION['action']="editprofile.php";
+
+
 }
 elseif (isset($_POST['fpuser'])) {
   $sql="SELECT * FROM user WHERE username=:un";

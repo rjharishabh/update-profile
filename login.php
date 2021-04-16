@@ -15,6 +15,7 @@ if (isset($_SESSION['id'])) {
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/script.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body>
 <div class="container">
@@ -74,6 +75,10 @@ if (isset($_SESSION['id'])) {
 </div>
         </div>
         </div>
+        <div class="form-group">
+<div class="g-recaptcha" data-sitekey="6Lf-ZawaAAAAAG3FrD-2zcOoIbW_9_vHYK-pYuTC"></div>
+        </div>
+
           <div class="form-group text-center">
             <button type="submit" class="btn btn-lg btn-primary">Log In</button>
           </div>
